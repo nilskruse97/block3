@@ -1,0 +1,7 @@
+#### Aufsetzen der Datenbank funder für das DB Praktikum WS 19/20 ####
+
+1. Anlegen der Datenbank und der zugehörigen Schemata -> create_tables.sql
+
+2. Anlegen des Triggers für die Datenbank -> create_trigger.sql
+
+3. Importieren der Beispieldaten -> inputs.sql

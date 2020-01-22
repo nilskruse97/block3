@@ -52,7 +52,6 @@
 		<servlet-name>hello_servlet</servlet-name>
 		<servlet-class>de.unidue.inf.is.HelloServlet</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>hello_servlet</servlet-name>
 		<url-pattern>/hello</url-pattern>
@@ -62,10 +61,73 @@
 		<servlet-name>projectFunder_servlet</servlet-name>
 		<servlet-class>de.unidue.inf.is.ProjectFunderServlet</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>projectFunder_servlet</servlet-name>
 		<url-pattern>/projectFunder</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>view_main_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.ViewMainServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>view_main_servlet</servlet-name>
+		<url-pattern>/view_main</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>edit_project_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.EditProjectServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>edit_project_servlet</servlet-name>
+		<url-pattern>/edit_project</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>new_comment_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.NewCommentServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>new_comment_servlet</servlet-name>
+		<url-pattern>/new_comment</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>new_project_fund_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.NewProjectFundServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>new_project_fund_servlet</servlet-name>
+		<url-pattern>/new_project_fund</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>new_project_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.NewProjectServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>new_project_servlet</servlet-name>
+		<url-pattern>/new_project</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>view_profile_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.ViewProfileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>view_profile_servlet</servlet-name>
+		<url-pattern>/view_profile</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>view_project_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.ViewProjectServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>view_project_servlet</servlet-name>
+		<url-pattern>/view_project</url-pattern>
 	</servlet-mapping>
 
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 

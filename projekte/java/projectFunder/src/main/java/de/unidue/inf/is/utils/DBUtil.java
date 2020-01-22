@@ -95,7 +95,7 @@ public final class DBUtil {
         // Nur für Demozwecke!
         boolean exists = false;
 
-        try (Connection connection = getConnection()) {
+        try (Connection connection = getExternalConnection()) {
             exists = true;
         }
         catch (SQLException e) {

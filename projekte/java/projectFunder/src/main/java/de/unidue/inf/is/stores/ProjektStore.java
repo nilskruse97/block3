@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.util.List;
 import de.unidue.inf.is.domain.Projekt;
 import de.unidue.inf.is.utils.DBUtil;
 
@@ -19,6 +19,9 @@ public class ProjektStore implements Closeable {
     private final String CLOSED_PROJECT_QUERY =
             "select * from dbp064.projekt where status='geschlossen'";
 
+    private final String PROJECT_FROM_CREATOR_QUERY =
+            "select * from dbp064.projekt where ersteller=(?)";
+
     public ProjektStore() throws StoreException {
         try {
             connection = DBUtil.getExternalConnection();
@@ -28,22 +31,42 @@ public class ProjektStore implements Closeable {
         }
     }
 
-    public ArrayList<Projekt> getOpenProjects() throws StoreException {
-        
+    public List<Projekt> getProjectsFromCreator(String creator) throws StoreException {
+
         ArrayList<Projekt> returnList = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(OPEN_PROJECT_QUERY);
-                ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                returnList.add(resultSetToProjekt(resultSet));
+        try (PreparedStatement preparedStatement =
+                connection.prepareStatement(PROJECT_FROM_CREATOR_QUERY)) {
+            preparedStatement.setString(1, creator);
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                while (resultSet.next()) {
+                    returnList.add(resultSetToProjekt(resultSet));
+                }
             }
             
+
         } catch (SQLException e) {
             throw new StoreException(e);
         }
         return returnList;
     }
 
-    public ArrayList<Projekt> getClosedProjects() throws StoreException {
+    public List<Projekt> getOpenProjects() throws StoreException {
+
+        ArrayList<Projekt> returnList = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(OPEN_PROJECT_QUERY);
+                ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                returnList.add(resultSetToProjekt(resultSet));
+            }
+
+        } catch (SQLException e) {
+            throw new StoreException(e);
+        }
+        return returnList;
+    }
+
+
+    public List<Projekt> getClosedProjects() throws StoreException {
         ArrayList<Projekt> returnList = new ArrayList<>();
         try (PreparedStatement preparedStatement =
                 connection.prepareStatement(CLOSED_PROJECT_QUERY);) {

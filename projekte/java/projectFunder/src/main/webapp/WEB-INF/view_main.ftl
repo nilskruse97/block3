@@ -45,7 +45,7 @@ body{
 		</div>
 	   
 		<div id="site">
-		
+		Offene Projekte
 		<table class="datatable">
 		    <tr>
 		        <th>Kennung</th>  <th>Titel</th>
@@ -56,7 +56,7 @@ body{
 		    </tr>
 		    </#list>
 	  	</table>
-	  	
+	  	Geschlossene Projekte
 	  	<table class="datatable">
 		    <tr>
 		        <th>Kennung</th>  <th>Titel</th>

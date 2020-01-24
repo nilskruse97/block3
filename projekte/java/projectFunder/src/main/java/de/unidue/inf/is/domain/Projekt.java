@@ -1,5 +1,7 @@
 package de.unidue.inf.is.domain;
 
+import java.util.List;
+
 public class Projekt
 {
     private int kennung;
@@ -12,6 +14,7 @@ public class Projekt
     private int fkKategorie;
     private Projekt vorgaenger;
     private Kategorie kategorie;
+    private List<Kommentar> kommentare;
 
     public Projekt()
     {
@@ -137,5 +140,15 @@ public class Projekt
     public void setKategorie(Kategorie kategorie)
     {
         this.kategorie = kategorie;
+    }
+
+    public List<Kommentar> getKommentare()
+    {
+        return kommentare;
+    }
+
+    public void setKommentare(List<Kommentar> kommentare)
+    {
+        this.kommentare = kommentare;
     }
 }

@@ -2,7 +2,6 @@ package de.unidue.inf.is;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,6 +15,10 @@ import de.unidue.inf.is.stores.StoreException;
 
 public class ViewProjectServlet extends HttpServlet
 {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private String HARDCODED_USER = "dummy@dummy.com";
 
     @Override
@@ -33,6 +36,7 @@ public class ViewProjectServlet extends HttpServlet
             else
             {
                 request.setAttribute("projekt", projekt);
+                projektStore.getComments(projekt);
             }
 
         }

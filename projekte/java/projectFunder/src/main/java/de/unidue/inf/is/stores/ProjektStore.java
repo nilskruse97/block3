@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.unidue.inf.is.domain.Kommentar;
 import de.unidue.inf.is.domain.Projekt;
 
 public class ProjektStore extends AbstractStore
@@ -16,10 +17,38 @@ public class ProjektStore extends AbstractStore
     private final String PROJECT_FROM_CREATOR_QUERY = "select * from dbp064.projekt where ersteller=(?)";
     private final String INSERT_PROJECT = "INSERT INTO dbp064.projekt (titel, beschreibung, finanzierungslimit, ersteller, vorgaenger, kategorie) VALUES (?,?,?,?,?,?)";
     private final String PROJECT_FROM_ID_QUERY = "select * from dbp064.projekt where kennung=(?)";
+    private final String PROJECT_WITH_CATEGORY = "select * from dbp064.projekt";
+    private final String GET_COMMENTS_QUERY = "select dbp064.schreibt.benutzer, dbp064.kommentar.text, dbp064.kommentar.sichtbarkeit from dbp064.kommentar join dbp064.schreibt on dbp064.schreibt.kommentar = dbp064.kommentar.id  where dbp064.schreibt.projekt=?";
 
     public ProjektStore() throws StoreException
     {
         super();
+    }
+
+    public List<Kommentar> getComments(Projekt projekt)
+    {
+        List<Kommentar> kommentare = new ArrayList<>();
+        try(PreparedStatement preparedStatement = connection.prepareStatement(GET_COMMENTS_QUERY))
+        {
+            preparedStatement.setInt(1, projekt.getKennung());
+            try(ResultSet resultSet = preparedStatement.executeQuery())
+            {
+                if(resultSet.next())
+                {
+                    kommentare.add(
+                            new Kommentar(
+                                    resultSet.getString(1),
+                                    resultSet.getString(2),
+                                    resultSet.getString(3).equalsIgnoreCase("oeffentlich")));
+                    System.out.println(resultSet.getString(2));
+                }
+            }
+        }
+        catch(SQLException e)
+        {
+            throw new StoreException(e);
+        }
+        return kommentare;
     }
 
     public void addProject(Projekt projekt)

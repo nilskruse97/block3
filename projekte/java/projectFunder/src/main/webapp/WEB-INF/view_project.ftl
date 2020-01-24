@@ -55,8 +55,6 @@ body{
 		Vorgänger: ${projekt.fkVorgaenger}<br/>
 		Beschreibung: ${projekt.beschreibung}<br/>
 		</#if>
-		
-		
 		</div>
 	</div>
 </body>

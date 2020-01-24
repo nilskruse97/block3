@@ -2,6 +2,7 @@ package de.unidue.inf.is;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -22,14 +23,20 @@ public class NewProjectServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        ProjektStore projektStore = new ProjektStore();
-        KategorieStore kategorieStore = new KategorieStore();
+        try(ProjektStore projektStore = new ProjektStore(); KategorieStore kategorieStore = new KategorieStore())
+        {
+            List<Projekt> eigeneProjekte = projektStore.getProjectsFromCreator(HARDCODED_USER);
+            List<Kategorie> kategorien = kategorieStore.getAll();
 
-        List<Projekt> eigeneProjekte = projektStore.getProjectsFromCreator(HARDCODED_USER);
-        List<Kategorie> kategorien = kategorieStore.getAll();
+            request.setAttribute("vorgaenger", eigeneProjekte);
+            request.setAttribute("kategorien", kategorien);
+        }
+        catch(StoreException e)
+        {
+            request.setAttribute("report", Arrays.asList("Fehler beim Laden aus der Datenbank!"));
+            e.printStackTrace();
+        }
 
-        request.setAttribute("vorgaenger", eigeneProjekte);
-        request.setAttribute("kategorien", kategorien);
         request.getRequestDispatcher("/new_project.ftl").forward(request, response);
 
     }

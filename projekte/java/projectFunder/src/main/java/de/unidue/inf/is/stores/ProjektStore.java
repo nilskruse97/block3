@@ -15,6 +15,7 @@ public class ProjektStore extends AbstractStore
     private final String CLOSED_PROJECT_QUERY = "select * from dbp064.projekt where status='geschlossen'";
     private final String PROJECT_FROM_CREATOR_QUERY = "select * from dbp064.projekt where ersteller=(?)";
     private final String INSERT_PROJECT = "INSERT INTO dbp064.projekt (titel, beschreibung, finanzierungslimit, ersteller, vorgaenger, kategorie) VALUES (?,?,?,?,?,?)";
+    private final String PROJECT_FROM_ID_QUERY = "select * from dbp064.projekt where kennung=(?)";
 
     public ProjektStore() throws StoreException
     {
@@ -44,6 +45,29 @@ public class ProjektStore extends AbstractStore
         {
             throw new StoreException(e);
         }
+    }
+
+    public Projekt getProject(int kennung) throws StoreException
+    {
+
+        Projekt projekt = null;
+        try(PreparedStatement preparedStatement = connection.prepareStatement(PROJECT_FROM_ID_QUERY))
+        {
+            preparedStatement.setInt(1, kennung);
+            try(ResultSet resultSet = preparedStatement.executeQuery())
+            {
+                if(resultSet.next())
+                {
+                    projekt = resultSetToProjekt(resultSet);
+                }
+            }
+
+        }
+        catch(SQLException e)
+        {
+            throw new StoreException(e);
+        }
+        return projekt;
     }
 
     public List<Projekt> getProjectsFromCreator(String creator) throws StoreException

@@ -20,13 +20,14 @@ public class ViewMainServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        ProjektStore projektStore = new ProjektStore();
-        openProjects = projektStore.getOpenProjects();
-        System.out.println(openProjects);
-        request.setAttribute("projekte", projektStore.getOpenProjects());
-        request.setAttribute("projekte2", projektStore.getClosedProjects());
+        System.out.println("teset");
+        try(ProjektStore projektStore = new ProjektStore())
+        {
+            request.setAttribute("projekte", projektStore.getOpenProjects());
+            request.setAttribute("projekte2", projektStore.getClosedProjects());
+        }
+
         request.getRequestDispatcher("/view_main.ftl").forward(request, response);
-        projektStore.close();
     }
 
     @Override

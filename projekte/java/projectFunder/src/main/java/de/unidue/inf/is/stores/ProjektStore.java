@@ -14,7 +14,7 @@ public class ProjektStore extends AbstractStore
     private final String OPEN_PROJECT_QUERY = "select * from dbp064.projekt where status='offen'";
     private final String CLOSED_PROJECT_QUERY = "select * from dbp064.projekt where status='geschlossen'";
     private final String PROJECT_FROM_CREATOR_QUERY = "select * from dbp064.projekt where ersteller=(?)";
-    private final String INSERT_PROJECT = "INSERT INTO projekt (titel, beschreibung, finanzierungslimit, ersteller, vorgaenger, kategorie) VALUES (?,?,?,?,?,?)";
+    private final String INSERT_PROJECT = "INSERT INTO dbp064.projekt (titel, beschreibung, finanzierungslimit, ersteller, vorgaenger, kategorie) VALUES (?,?,?,?,?,?)";
 
     public ProjektStore() throws StoreException
     {

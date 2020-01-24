@@ -44,7 +44,6 @@ public class ViewProjectServlet extends HttpServlet
         catch(NumberFormatException e)
         {
             report.add("Ungültige Kennung!");
-            e.printStackTrace();
         }
         request.setAttribute("report", report);
         request.getRequestDispatcher("/view_project.ftl").forward(request, response);
@@ -54,7 +53,6 @@ public class ViewProjectServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-
         doGet(request, response);
     }
 }

@@ -51,8 +51,8 @@ body{
    		<#if projekt??>
 		Kennung: ${projekt.kennung}<br/>
 		Titel: ${projekt.titel}<br/>
-		Kategorie: ${projekt.kategorie}<br/>
-		Vorgänger: ${projekt.vorgaenger}<br/>
+		Kategorie: ${projekt.fkKategorie}<br/>
+		Vorgänger: ${projekt.fkVorgaenger}<br/>
 		Beschreibung: ${projekt.beschreibung}<br/>
 		</#if>
 		

@@ -29,7 +29,14 @@ public class ProjektStore extends AbstractStore
             preparedStatement.setString(2, projekt.getBeschreibung());
             preparedStatement.setDouble(3, projekt.getFinanzierungslimit());
             preparedStatement.setString(4, projekt.getErsteller());
-            preparedStatement.setInt(5, projekt.getVorgaenger());
+            if(projekt.getVorgaenger() == -1)
+            {
+                preparedStatement.setNull(5, projekt.getVorgaenger());
+            }
+            else
+            {
+                preparedStatement.setInt(5, projekt.getVorgaenger());
+            }
             preparedStatement.setInt(6, projekt.getKategorie());
             preparedStatement.executeUpdate();
         }

@@ -57,6 +57,8 @@ body{
 	</#list>
 	
 	Vorgaenger:<br/>
+	<input type="radio" id="-1" name="vorgaenger" value="-1">
+	  	<label for="vorgaenger">Keiner</label><br/>
 	<#list vorgaenger as v>
 		<input type="radio" id="${v.kennung}" name="vorgaenger" value="${v.kennung}">
 	  	<label for="vorgaenger">${v.titel}</label><br/>

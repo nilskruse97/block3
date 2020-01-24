@@ -25,7 +25,7 @@ public class NewProjectServlet extends HttpServlet
         ProjektStore projektStore = new ProjektStore();
         KategorieStore kategorieStore = new KategorieStore();
 
-        List<Projekt> eigeneProjekte = projektStore.getProjectsFromCreator("dummy@dummy.com");
+        List<Projekt> eigeneProjekte = projektStore.getProjectsFromCreator(HARDCODED_USER);
         List<Kategorie> kategorien = kategorieStore.getAll();
 
         request.setAttribute("vorgaenger", eigeneProjekte);
@@ -58,7 +58,7 @@ public class NewProjectServlet extends HttpServlet
                 projekt.setBeschreibung(beschreibung);
                 projektStore.addProject(projekt);
                 projektStore.complete();
-                report.add("Projekt erfolgreich erstellt");
+                report.add("Projekt erfolgreich erstellt!");
             }
             catch(StoreException e)
             {

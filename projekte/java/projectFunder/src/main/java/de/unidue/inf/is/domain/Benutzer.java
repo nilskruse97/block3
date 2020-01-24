@@ -5,6 +5,7 @@ public class Benutzer
     private String email;
     private String name;
     private String beschreibung;
+    private Konto konto;
 
     public Benutzer()
     {
@@ -47,5 +48,15 @@ public class Benutzer
     public void setBeschreibung(String beschreibung)
     {
         this.beschreibung = beschreibung;
+    }
+
+    public Konto getKonto()
+    {
+        return konto;
+    }
+
+    public void setKonto(Konto konto)
+    {
+        this.konto = konto;
     }
 }

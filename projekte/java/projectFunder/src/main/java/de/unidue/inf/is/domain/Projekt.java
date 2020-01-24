@@ -2,110 +2,140 @@ package de.unidue.inf.is.domain;
 
 public class Projekt
 {
-	private int kennung;
-	private String titel;
-	private String beschreibung;
-	private String status;
-	private double finanzierungslimit;
-	private String ersteller;
-	private int vorgaenger;
-	private int kategorie;
+    private int kennung;
+    private String titel;
+    private String beschreibung;
+    private String status;
+    private double finanzierungslimit;
+    private String ersteller;
+    private int fkVorgaenger;
+    private int fkKategorie;
+    private Projekt vorgaenger;
+    private Kategorie kategorie;
 
-	public Projekt()
-	{
-		super();
-	}
-	public Projekt(int kennung, String titel, String beschreibung, String status, double finanzierungslimit,
-			String ersteller, int vorgaenger, int kategorie)
-	{
-		super();
-		this.kennung = kennung;
-		this.titel = titel;
-		this.beschreibung = beschreibung;
-		this.status = status;
-		this.finanzierungslimit = finanzierungslimit;
-		this.ersteller = ersteller;
-		this.vorgaenger = vorgaenger;
-		this.kategorie = kategorie;
-	}
+    public Projekt()
+    {
+        super();
+    }
 
-	public int getKennung()
-	{
-		return kennung;
-	}
+    public Projekt(
+            int kennung,
+            String titel,
+            String beschreibung,
+            String status,
+            double finanzierungslimit,
+            String ersteller,
+            int vorgaenger,
+            int kategorie)
+    {
+        super();
+        this.kennung = kennung;
+        this.titel = titel;
+        this.beschreibung = beschreibung;
+        this.status = status;
+        this.finanzierungslimit = finanzierungslimit;
+        this.ersteller = ersteller;
+        this.fkVorgaenger = vorgaenger;
+        this.fkKategorie = kategorie;
+    }
 
-	public void setKennung(int kennung)
-	{
-		this.kennung = kennung;
-	}
+    public int getKennung()
+    {
+        return kennung;
+    }
 
-	public String getTitel()
-	{
-		return titel;
-	}
+    public void setKennung(int kennung)
+    {
+        this.kennung = kennung;
+    }
 
-	public void setTitel(String titel)
-	{
-		this.titel = titel;
-	}
+    public String getTitel()
+    {
+        return titel;
+    }
 
-	public String getBeschreibung()
-	{
-		return beschreibung;
-	}
+    public void setTitel(String titel)
+    {
+        this.titel = titel;
+    }
 
-	public void setBeschreibung(String beschreibung)
-	{
-		this.beschreibung = beschreibung;
-	}
+    public String getBeschreibung()
+    {
+        return beschreibung;
+    }
 
-	public String getStatus()
-	{
-		return status;
-	}
+    public void setBeschreibung(String beschreibung)
+    {
+        this.beschreibung = beschreibung;
+    }
 
-	public void setStatus(String status)
-	{
-		this.status = status;
-	}
+    public String getStatus()
+    {
+        return status;
+    }
 
-	public double getFinanzierungslimit()
-	{
-		return finanzierungslimit;
-	}
+    public void setStatus(String status)
+    {
+        this.status = status;
+    }
 
-	public void setFinanzierungslimit(double finanzierungslimit)
-	{
-		this.finanzierungslimit = finanzierungslimit;
-	}
+    public double getFinanzierungslimit()
+    {
+        return finanzierungslimit;
+    }
 
-	public String getErsteller()
-	{
-		return ersteller;
-	}
+    public void setFinanzierungslimit(double finanzierungslimit)
+    {
+        this.finanzierungslimit = finanzierungslimit;
+    }
 
-	public void setErsteller(String string)
-	{
-		this.ersteller = string;
-	}
+    public String getErsteller()
+    {
+        return ersteller;
+    }
 
-	public int getVorgaenger()
-	{
-		return vorgaenger;
-	}
+    public void setErsteller(String string)
+    {
+        this.ersteller = string;
+    }
 
-	public void setVorgaenger(int vorgaenger)
-	{
-		this.vorgaenger = vorgaenger;
-	}
+    public int getFkVorgaenger()
+    {
+        return fkVorgaenger;
+    }
 
-	public int getKategorie()
-	{
-		return kategorie;
-	}
+    public void setFkVorgaenger(int vorgaenger)
+    {
+        this.fkVorgaenger = vorgaenger;
+    }
 
-	public void setKategorie(int kategorie)
-	{
-		this.kategorie = kategorie;
-	}
+    public int getFkKategorie()
+    {
+        return fkKategorie;
+    }
+
+    public void setFkKategorie(int kategorie)
+    {
+        this.fkKategorie = kategorie;
+    }
+
+    public Projekt getVorgaenger()
+    {
+        return vorgaenger;
+    }
+
+    public void setVorgaenger(Projekt vorgaenger)
+    {
+        this.vorgaenger = vorgaenger;
+    }
+
+    public Kategorie getKategorie()
+    {
+        return kategorie;
+    }
+
+    public void setKategorie(Kategorie kategorie)
+    {
+        this.kategorie = kategorie;
+    }
 }

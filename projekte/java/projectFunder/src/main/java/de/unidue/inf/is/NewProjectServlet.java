@@ -59,9 +59,9 @@ public class NewProjectServlet extends HttpServlet
                 Projekt projekt = new Projekt();
                 projekt.setTitel(titel);
                 projekt.setFinanzierungslimit(Double.parseDouble(finanzierungslimit));
-                projekt.setKategorie(Integer.parseInt(kategorie));
+                projekt.setFkKategorie(Integer.parseInt(kategorie));
                 projekt.setErsteller(HARDCODED_USER);
-                projekt.setVorgaenger(Integer.parseInt(vorgaenger));
+                projekt.setFkVorgaenger(Integer.parseInt(vorgaenger));
                 projekt.setBeschreibung(beschreibung);
                 projektStore.addProject(projekt);
                 projektStore.complete();

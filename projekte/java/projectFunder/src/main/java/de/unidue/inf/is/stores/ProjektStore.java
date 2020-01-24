@@ -30,15 +30,15 @@ public class ProjektStore extends AbstractStore
             preparedStatement.setString(2, projekt.getBeschreibung());
             preparedStatement.setDouble(3, projekt.getFinanzierungslimit());
             preparedStatement.setString(4, projekt.getErsteller());
-            if(projekt.getVorgaenger() == -1)
+            if(projekt.getFkVorgaenger() == -1)
             {
-                preparedStatement.setNull(5, projekt.getVorgaenger());
+                preparedStatement.setNull(5, projekt.getFkVorgaenger());
             }
             else
             {
-                preparedStatement.setInt(5, projekt.getVorgaenger());
+                preparedStatement.setInt(5, projekt.getFkVorgaenger());
             }
-            preparedStatement.setInt(6, projekt.getKategorie());
+            preparedStatement.setInt(6, projekt.getFkKategorie());
             preparedStatement.executeUpdate();
         }
         catch(SQLException e)
@@ -143,8 +143,8 @@ public class ProjektStore extends AbstractStore
         projekt.setStatus(rs.getString("status"));
         projekt.setFinanzierungslimit(rs.getDouble("finanzierungslimit"));
         projekt.setErsteller(rs.getString("ersteller"));
-        projekt.setVorgaenger(rs.getInt("vorgaenger"));
-        projekt.setKategorie(rs.getInt("kategorie"));
+        projekt.setFkVorgaenger(rs.getInt("vorgaenger"));
+        projekt.setFkKategorie(rs.getInt("kategorie"));
         return projekt;
     }
 

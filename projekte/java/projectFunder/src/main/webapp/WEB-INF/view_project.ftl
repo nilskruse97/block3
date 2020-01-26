@@ -49,10 +49,13 @@ body{
 			${r}<br/>
    		</#list>
    		<#if projekt??>
-		Kennung: ${projekt.kennung}<br/>
+		Icon: ${projekt.kategorie.icon}<br/>
 		Titel: ${projekt.titel}<br/>
-		Kategorie: ${projekt.fkKategorie}<br/>
-		Vorgänger: ${projekt.fkVorgaenger}<br/>
+		Ersteller: ${projekt.ersteller}<br/>
+		Finanzierungslimit: ${projekt.finanzierungslimit}<br/>
+		Spendensumme: ${projekt.spendenmenge}<br/>
+		Status: ${projekt.status}<br/>
+		<a href="/view_project?kennung=${projekt.fkVorgaenger}>Vorgänger<a/><br/>
 		Beschreibung: ${projekt.beschreibung}<br/>
 		</#if>
 		</div>

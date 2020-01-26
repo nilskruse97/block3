@@ -47,15 +47,6 @@
 		<servlet-name>freemarker</servlet-name>
 		<url-pattern>*.ftl</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>hello_servlet</servlet-name>
-		<servlet-class>de.unidue.inf.is.HelloServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>hello_servlet</servlet-name>
-		<url-pattern>/hello</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>projectFunder_servlet</servlet-name>

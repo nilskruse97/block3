@@ -43,16 +43,17 @@ body{
 		<div id="header">
 		<h1> ProjectFunder Website </h1>
 		</div>
-	   
+	   	<a href="/new_project">Projekt erstellen<a/><br/>
+	   	<a href="/view_profile">Mein Profil<a/><br/>
 		<div id="site">
 		Offene Projekte
 		<table class="datatable">
 		    <tr>
-		        <th>Kennung</th>  <th>Titel</th>
+		        <th>Kategorie</th>  <th>Titel</th> <th>Ersteller</th> <th>Spendensumme</th>
 		    </tr>
 		    <#list projekte as projekt>
 		    <tr>
-		        <td>${projekt.kennung}</td> <td>${projekt.titel}</td>
+		        <td><img src="${projekt.kategorie.icon}">${projekt.kategorie.icon}</td> <td><a href="/view_project?kennung=${projekt.kennung}">${projekt.titel}<a/></td> <td><a href="/view_profile?nutzer=${projekt.ersteller}">${projekt.ersteller}<a/></td> <td>${projekt.spendenmenge}</td>
 		    </tr>
 		    </#list>
 	  	</table>
@@ -63,12 +64,15 @@ body{
 		    </tr>
 		    <#list projekte2 as projekt>
 		    <tr>
-		        <td>${projekt.kennung}</td> <td>${projekt.titel}</td>
+		        <td>${projekt.kennung}</td> <td><a href="/view_project?kennung=${projekt.kennung}">${projekt.titel}<a/></td>
 		    </tr>
 		    </#list>
 	  	</table>
 		<tr>
 		</div>
+		<#list report! as r>
+			${r}<br/>
+   		</#list>
 	</div>
 </body>
 </html>

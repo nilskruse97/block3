@@ -15,9 +15,6 @@ import de.unidue.inf.is.stores.StoreException;
 
 public class ViewProjectServlet extends HttpServlet
 {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private String HARDCODED_USER = "dummy@dummy.com";
 
@@ -28,7 +25,7 @@ public class ViewProjectServlet extends HttpServlet
         try(ProjektStore projektStore = new ProjektStore())
         {
             int kennung = Integer.parseInt(request.getParameter("kennung"));
-            Projekt projekt = projektStore.getProject(kennung);
+            Projekt projekt = projektStore.getProjectForViewProject(kennung);
             if(projekt == null)
             {
                 report.add("Projekt nicht gefunden!");

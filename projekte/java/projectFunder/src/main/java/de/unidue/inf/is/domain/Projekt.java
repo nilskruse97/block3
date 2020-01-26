@@ -12,9 +12,11 @@ public class Projekt
     private String ersteller;
     private int fkVorgaenger;
     private int fkKategorie;
+    private double spendenmenge;
     private Projekt vorgaenger;
     private Kategorie kategorie;
     private List<Kommentar> kommentare;
+   
 
     public Projekt()
     {
@@ -150,5 +152,15 @@ public class Projekt
     public void setKommentare(List<Kommentar> kommentare)
     {
         this.kommentare = kommentare;
+    }
+
+    public double getSpendenmenge()
+    {
+        return spendenmenge;
+    }
+
+    public void setSpendenmenge(double spendenmenge)
+    {
+        this.spendenmenge = spendenmenge;
     }
 }

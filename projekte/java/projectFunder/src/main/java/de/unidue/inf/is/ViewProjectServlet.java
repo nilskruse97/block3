@@ -16,7 +16,7 @@ import de.unidue.inf.is.stores.StoreException;
 public class ViewProjectServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-    private String HARDCODED_USER = "dummy@dummy.com";
+    private String USER = HardcodedUser.get();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

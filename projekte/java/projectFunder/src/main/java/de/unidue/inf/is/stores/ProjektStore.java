@@ -25,11 +25,15 @@ public class ProjektStore extends AbstractStore
     private final String CLOSED_PROJECTS_FOR_MAIN_QUERY = 
             "select p.titel, p.ersteller, (select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), k.icon, p.kennung from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.status='geschlossen'";
     private final String PROJECTS_FOR_VIEW_PROJECT_QUERY = 
-            "select k.pfad, p.titel, p.ersteller, p.beschreibung, p.finanzierungslimit, "
+            "select k.icon, p.titel, p.ersteller, p.beschreibung, p.finanzierungslimit, "
             + "(select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), p.status "
             + "from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.kennung = ?";
     private final String GET_COMMENTS_QUERY = "select dbp064.schreibt.benutzer, dbp064.kommentar.text, dbp064.kommentar.sichtbarkeit from dbp064.kommentar join dbp064.schreibt on dbp064.schreibt.kommentar = dbp064.kommentar.id  where dbp064.schreibt.projekt=?";
 
+    
+    private final String DELETE_PROJECT = "delete from dbp064.projekt where kennung=?";
+    private final String DELETE_FUNDS = "delete from dbp064.spende where projekt=?";
+    private final String DELETE_COMMENTS = "delete from dbp064.spende where projekt=?";
     public ProjektStore() throws StoreException
     {
         super();
@@ -109,6 +113,10 @@ public class ProjektStore extends AbstractStore
         return returnMap;
     }
     
+    public void deleteProject(int kennung) {
+        
+    }
+    
     public List<Kommentar> getComments(Projekt projekt)
     {
         List<Kommentar> kommentare = new ArrayList<>();
@@ -182,29 +190,7 @@ public class ProjektStore extends AbstractStore
         }
         return projekt;
     }
-    
-    public Projekt getProjectWithCategory(int kennung) throws StoreException
-    {
-
-        Projekt projekt = null;
-        try(PreparedStatement preparedStatement = connection.prepareStatement(PROJECT_FROM_ID_QUERY))
-        {
-            preparedStatement.setInt(1, kennung);
-            try(ResultSet resultSet = preparedStatement.executeQuery())
-            {
-                if(resultSet.next())
-                {
-                    projekt = resultSetToProjekt(resultSet);
-                }
-            }
-
-        }
-        catch(SQLException e)
-        {
-            throw new StoreException(e);
-        }
-        return projekt;
-    }
+   
 
     public List<Projekt> getProjectsFromCreator(String creator) throws StoreException
     {
@@ -228,48 +214,7 @@ public class ProjektStore extends AbstractStore
         }
         return returnList;
     }
-
-    public List<Projekt> getOpenProjects() throws StoreException
-    {
-
-        ArrayList<Projekt> returnList = new ArrayList<>();
-        try(
-            PreparedStatement preparedStatement = connection.prepareStatement(OPEN_PROJECT_QUERY);
-            ResultSet resultSet = preparedStatement.executeQuery())
-        {
-            while(resultSet.next())
-            {
-                returnList.add(resultSetToProjekt(resultSet));
-            }
-
-        }
-        catch(SQLException e)
-        {
-            throw new StoreException(e);
-        }
-        return returnList;
-    }
-
-    public List<Projekt> getClosedProjects() throws StoreException
-    {
-        ArrayList<Projekt> returnList = new ArrayList<>();
-        try(PreparedStatement preparedStatement = connection.prepareStatement(CLOSED_PROJECT_QUERY);)
-        {
-            try(ResultSet resultSet = preparedStatement.executeQuery())
-            {
-                while(resultSet.next())
-                {
-                    returnList.add(resultSetToProjekt(resultSet));
-                }
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new StoreException(e);
-        }
-        return returnList;
-    }
-
+    
     private Projekt resultSetToProjekt(ResultSet rs) throws SQLException
     {
         Projekt projekt = new Projekt();

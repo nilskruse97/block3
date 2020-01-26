@@ -18,14 +18,15 @@ import de.unidue.inf.is.stores.StoreException;
 
 public class NewProjectServlet extends HttpServlet
 {
-    private String HARDCODED_USER = "dummy@dummy.com";
+    private static final long serialVersionUID = 1L;
+    private String USER = HardcodedUser.get();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         try(ProjektStore projektStore = new ProjektStore(); KategorieStore kategorieStore = new KategorieStore())
         {
-            List<Projekt> eigeneProjekte = projektStore.getProjectsFromCreator(HARDCODED_USER);
+            List<Projekt> eigeneProjekte = projektStore.getProjectsFromCreator(USER);
             List<Kategorie> kategorien = kategorieStore.getAll();
 
             request.setAttribute("vorgaenger", eigeneProjekte);
@@ -60,7 +61,7 @@ public class NewProjectServlet extends HttpServlet
                 projekt.setTitel(titel);
                 projekt.setFinanzierungslimit(Double.parseDouble(finanzierungslimit));
                 projekt.setFkKategorie(Integer.parseInt(kategorie));
-                projekt.setErsteller(HARDCODED_USER);
+                projekt.setErsteller(USER);
                 projekt.setFkVorgaenger(Integer.parseInt(vorgaenger));
                 projekt.setBeschreibung(beschreibung);
                 projektStore.addProject(projekt);

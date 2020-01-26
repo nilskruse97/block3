@@ -17,16 +17,19 @@ import de.unidue.inf.is.stores.StoreException;
 public class ViewMainServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-    
+    private String USER = HardcodedUser.get();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         try(ProjektStore projektStore = new ProjektStore())
         {
-            Map<String,List<Projekt>> projects = projektStore.getProjectsForMain();
+            Map<String, List<Projekt>> projects = projektStore.getProjectsForMain();
             request.setAttribute("projekte", projects.get("offen"));
             request.setAttribute("projekte2", projects.get("geschlossen"));
-        }catch(StoreException e) {
+        }
+        catch(StoreException e)
+        {
             request.setAttribute("report", Arrays.asList("Datenbankfehler!"));
             e.printStackTrace();
         }

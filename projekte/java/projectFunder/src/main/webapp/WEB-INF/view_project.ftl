@@ -62,8 +62,7 @@ body{
 		<a href="/new_project_fund?kennung=${projekt.kennung}">Spenden<a/><br/>
 		<a href="/edit_project?kennung=${projekt.kennung}">Projekt editieren<a/><br/>
 		<a href="/view_project?kennung=${projekt.kennung}&delete=1">Projekt löschen<a/><br/>
-		<a href="/view_project?kennung=${projekt.kennung}">Spenden<a/><br/>
-		
+		<a href="/new_comment?kennung=${projekt.kennung}">Kommentieren<a/><br/>
 		Kommentare:<br/>
 		<#list projekt.kommentare as k>
 	    ${k.benutzer}: ${k.kommentar}<br/>

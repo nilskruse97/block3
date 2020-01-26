@@ -24,7 +24,7 @@ public class ProjektStore extends AbstractStore
     private final String PROJECTS_FOR_VIEW_PROJECT_QUERY = "select k.icon, p.titel, p.ersteller, p.beschreibung, p.finanzierungslimit, "
             + "(select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), p.status, p.vorgaenger "
             + "from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.kennung = ?";
-    private final String GET_COMMENTS_QUERY = "select s.benutzer, k.text, k.sichtbarkeit from dbp064.kommentar k join dbp064.schreibt s on s.kommentar = k.id where s.projekt=?";
+    private final String GET_COMMENTS_QUERY = "select s.benutzer, k.text, k.sichtbarkeit from dbp064.kommentar k join dbp064.schreibt s on s.kommentar = k.id where s.projekt=? order by k.id desc";
     private final String GET_FUNDS_QUERY = "select s.spender, s.spendenbetrag, s.sichtbarkeit from dbp064.spenden s where s.projekt=? order by s.spendenbetrag desc";
 
     private final String DELETE_PROJECT = "delete from dbp064.projekt p where p.kennung=?";

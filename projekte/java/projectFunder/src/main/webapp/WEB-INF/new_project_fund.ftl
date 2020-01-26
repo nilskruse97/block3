@@ -45,7 +45,7 @@ body{
 		</div>
 	   
 		<div id="site">
-		<form name="projekt" action="new_project" method="post">
+		<form name="projekt" action="/new_project_fund?kennung=${projekt.kennung}" method="post">
     ${projekt.titel}<br/>
     Finanzierungslimit: ${projekt.finanzierungslimit} <br/>
     Spendenbetrag: <input type="text" name="spendenbetrag" /> <br/>

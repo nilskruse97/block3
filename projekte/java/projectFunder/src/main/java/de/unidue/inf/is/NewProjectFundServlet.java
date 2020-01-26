@@ -61,6 +61,13 @@ public class NewProjectFundServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        doGet(request, response);
+        String spendenbetrag = request.getParameter("spendenbetrag");
+        String sichtbarkeit = request.getParameter("sichtbarkeit");
+        String kennung = request.getParameter("kennung");
+        System.out.println(spendenbetrag);
+        System.out.println(sichtbarkeit);
+        System.out.println(kennung);
+        response.sendRedirect("/view_project?kennung=" + kennung);
+        //doGet(request, response);
     }
 }

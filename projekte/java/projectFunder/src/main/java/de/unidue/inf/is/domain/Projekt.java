@@ -1,5 +1,6 @@
 package de.unidue.inf.is.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Projekt
@@ -16,11 +17,13 @@ public class Projekt
     private Projekt vorgaenger;
     private Kategorie kategorie;
     private List<Kommentar> kommentare;
-   
+    private List<Spende> spenden;
 
     public Projekt()
     {
         super();
+        kommentare = new ArrayList<>();
+        setSpenden(new ArrayList<>());
     }
 
     public Projekt(
@@ -34,6 +37,8 @@ public class Projekt
             int kategorie)
     {
         super();
+        kommentare = new ArrayList<>();
+        setSpenden(new ArrayList<>());
         this.kennung = kennung;
         this.titel = titel;
         this.beschreibung = beschreibung;
@@ -162,5 +167,15 @@ public class Projekt
     public void setSpendenmenge(double spendenmenge)
     {
         this.spendenmenge = spendenmenge;
+    }
+
+    public List<Spende> getSpenden()
+    {
+        return spenden;
+    }
+
+    public void setSpenden(List<Spende> spenden)
+    {
+        this.spenden = spenden;
     }
 }

@@ -55,16 +55,28 @@ body{
 		Finanzierungslimit: ${projekt.finanzierungslimit}<br/>
 		Spendensumme: ${projekt.spendenmenge}<br/>
 		Status: ${projekt.status}<br/>
-		<a href="/view_project?kennung=${projekt.fkVorgaenger}">Vorgänger<a/><br/>
+		<#if projekt.fkVorgaenger gt 0 >
+			<a href="/view_project?kennung=${projekt.fkVorgaenger}">Vorgänger<a/><br/>
+		</#if>
 		Beschreibung: ${projekt.beschreibung}<br/>
 		<a href="/new_project_fund?kennung=${projekt.kennung}">Spenden<a/><br/>
 		<a href="/edit_project?kennung=${projekt.kennung}">Projekt editieren<a/><br/>
 		<a href="/view_project?kennung=${projekt.kennung}&delete=1">Projekt löschen<a/><br/>
+		<a href="/view_project?kennung=${projekt.kennung}">Spenden<a/><br/>
 		
+		Kommentare:<br/>
+		<#list projekt.kommentare as k>
+	    ${k.benutzer}: ${k.kommentar}<br/>
+	    </#list>
+	    
+	    Spenden:<br/>
+		<#list projekt.spenden as s>
+	    ${s.spender}: ${s.spendenbetrag}<br/>
+	    </#list>
 		</#if>
 		</div>
 		
-		<a href="/view_project?kennung=${projekt.kennung}">Spenden<a/><br/>
+		
 	</div>
 </body>
 </html>

@@ -5,6 +5,7 @@ public class Kommentar
     private String benutzer;
     private String text;
     private boolean sichtbar;
+    private String nutzer;
 
     public Kommentar()
     {
@@ -47,6 +48,16 @@ public class Kommentar
     public void setSichtbar(boolean sichtbar)
     {
         this.sichtbar = sichtbar;
+    }
+
+    public String getNutzer()
+    {
+        return nutzer;
+    }
+
+    public void setNutzer(String nutzer)
+    {
+        this.nutzer = nutzer;
     }
 
 }

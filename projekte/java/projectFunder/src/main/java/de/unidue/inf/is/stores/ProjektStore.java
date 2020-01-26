@@ -11,55 +11,80 @@ import java.util.Map;
 import de.unidue.inf.is.domain.Kategorie;
 import de.unidue.inf.is.domain.Kommentar;
 import de.unidue.inf.is.domain.Projekt;
+import de.unidue.inf.is.domain.Spende;
 
 public class ProjektStore extends AbstractStore
 {
 
-    private final String OPEN_PROJECT_QUERY = "select * from dbp064.projekt where status='offen'";
-    private final String CLOSED_PROJECT_QUERY = "select * from dbp064.projekt where status='geschlossen'";
     private final String PROJECT_FROM_CREATOR_QUERY = "select * from dbp064.projekt where ersteller=(?)";
     private final String INSERT_PROJECT = "INSERT INTO dbp064.projekt (titel, beschreibung, finanzierungslimit, ersteller, vorgaenger, kategorie) VALUES (?,?,?,?,?,?)";
     private final String PROJECT_FROM_ID_QUERY = "select * from dbp064.projekt where kennung=(?)";
-    private final String OPEN_PROJECTS_FOR_MAIN_QUERY = 
-            "select p.titel, p.ersteller, (select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), k.icon, p.kennung from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.status='offen'";
-    private final String CLOSED_PROJECTS_FOR_MAIN_QUERY = 
-            "select p.titel, p.ersteller, (select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), k.icon, p.kennung from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.status='geschlossen'";
-    private final String PROJECTS_FOR_VIEW_PROJECT_QUERY = 
-            "select k.icon, p.titel, p.ersteller, p.beschreibung, p.finanzierungslimit, "
-            + "(select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), p.status "
+    private final String OPEN_PROJECTS_FOR_MAIN_QUERY = "select p.titel, p.ersteller, (select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), k.icon, p.kennung from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.status='offen'";
+    private final String CLOSED_PROJECTS_FOR_MAIN_QUERY = "select p.titel, p.ersteller, (select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), k.icon, p.kennung from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.status='geschlossen'";
+    private final String PROJECTS_FOR_VIEW_PROJECT_QUERY = "select k.icon, p.titel, p.ersteller, p.beschreibung, p.finanzierungslimit, "
+            + "(select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), p.status, p.vorgaenger "
             + "from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.kennung = ?";
-    private final String GET_COMMENTS_QUERY = "select dbp064.schreibt.benutzer, dbp064.kommentar.text, dbp064.kommentar.sichtbarkeit from dbp064.kommentar join dbp064.schreibt on dbp064.schreibt.kommentar = dbp064.kommentar.id  where dbp064.schreibt.projekt=?";
+    private final String GET_COMMENTS_QUERY = "select s.benutzer, k.text, k.sichtbarkeit from dbp064.kommentar k join dbp064.schreibt s on s.kommentar = k.id where s.projekt=?";
+    private final String GET_FUNDS_QUERY = "select s.spender, s.spendenbetrag, s.sichtbarkeit from dbp064.spenden s where s.projekt=? order by s.spendenbetrag desc";
 
-    
-    private final String DELETE_PROJECT = "delete from dbp064.projekt where kennung=?";
-    private final String DELETE_FUNDS = "delete from dbp064.spende where projekt=?";
-    private final String DELETE_COMMENTS = "delete from dbp064.spende where projekt=?";
+    private final String DELETE_PROJECT = "delete from dbp064.projekt p where p.kennung=?";
+    private final String DELETE_COMMENTS = "delete from dbp064.kommentar k where k.id in (select s.kommentar from dbp064.schreibt s where s.projekt = ?)";
+    private final String DELETE_FUNDS = "delete from dbp064.spenden s where s.projekt=?";
+    private final String REFUND = "update konto k set k.guthaben = k.guthaben + ? where k.inhaber = ?";
+
     public ProjektStore() throws StoreException
     {
         super();
     }
-    
-    public Projekt getProjectForViewProject(int kennung) throws StoreException{
-        
-        
+
+    public Projekt getProjectForViewProject(int kennung) throws StoreException
+    {
+
         Projekt projekt = null;
-        try(PreparedStatement preparedStatement = connection.prepareStatement(PROJECTS_FOR_VIEW_PROJECT_QUERY))
+        try(
+            PreparedStatement preparedStatement = connection.prepareStatement(PROJECTS_FOR_VIEW_PROJECT_QUERY);
+            PreparedStatement preparedStatement2 = connection.prepareStatement(GET_COMMENTS_QUERY);
+            PreparedStatement preparedStatement3 = connection.prepareStatement(GET_FUNDS_QUERY))
         {
             preparedStatement.setInt(1, kennung);
-            try(ResultSet rs = preparedStatement.executeQuery())
+            preparedStatement2.setInt(1, kennung);
+            preparedStatement3.setInt(1, kennung);
+            try(
+                ResultSet rs = preparedStatement.executeQuery();
+                ResultSet rs2 = preparedStatement2.executeQuery();
+                ResultSet rs3 = preparedStatement3.executeQuery())
             {
                 if(rs.next())
                 {
                     projekt = new Projekt();
                     projekt.setKennung(kennung);
-                    projekt.setKategorie(new Kategorie(0,null,rs.getString(1)));
+                    projekt.setKategorie(new Kategorie(0, null, rs.getString(1)));
                     projekt.setTitel(rs.getString(2));
                     projekt.setErsteller(rs.getString(3));
                     projekt.setBeschreibung(rs.getString(4));
                     projekt.setFinanzierungslimit(rs.getDouble(5));
                     projekt.setSpendenmenge(rs.getDouble(6));
                     projekt.setStatus(rs.getString(7));
+                    projekt.setFkVorgaenger(rs.getInt(8));
+                    while(rs2.next())
+                    {
+                        Kommentar kommentar = new Kommentar();
+                        kommentar.setBenutzer(rs2.getString(3).equals("oeffentlich") ? rs2.getString(1) : "Anonym");
+                        kommentar.setNutzer(rs2.getString(1));
+                        kommentar.setKommentar(rs2.getString(2));
+                        projekt.getKommentare().add(kommentar);
+                    }
+
+                    while(rs3.next())
+                    {
+                        Spende spende = new Spende();
+                        spende.setSpender(rs3.getString(3).equals("oeffentlich") ? rs3.getString(1) : "Anonym");
+                        spende.setNutzer(rs3.getString(1));
+                        spende.setSpendenbetrag(rs3.getDouble(2));
+                        projekt.getSpenden().add(spende);
+                    }
                 }
+
             }
 
         }
@@ -70,18 +95,18 @@ public class ProjektStore extends AbstractStore
         return projekt;
     }
 
-    public Map<String,List<Projekt>> getProjectsForMain() throws StoreException
+    public Map<String, List<Projekt>> getProjectsForMain() throws StoreException
     {
-        Map<String,List<Projekt>> returnMap = new HashMap<>();
+        Map<String, List<Projekt>> returnMap = new HashMap<>();
         List<Projekt> openProjects = new ArrayList<>();
         List<Projekt> closedProjects = new ArrayList<>();
         returnMap.put("offen", openProjects);
         returnMap.put("geschlossen", closedProjects);
         try(
             PreparedStatement preparedStatement = connection.prepareStatement(OPEN_PROJECTS_FOR_MAIN_QUERY);
-                PreparedStatement preparedStatement2 = connection.prepareStatement(CLOSED_PROJECTS_FOR_MAIN_QUERY);
+            PreparedStatement preparedStatement2 = connection.prepareStatement(CLOSED_PROJECTS_FOR_MAIN_QUERY);
             ResultSet resultSet = preparedStatement.executeQuery();
-                ResultSet resultSet2 = preparedStatement2.executeQuery())
+            ResultSet resultSet2 = preparedStatement2.executeQuery())
         {
             while(resultSet.next())
             {
@@ -89,18 +114,18 @@ public class ProjektStore extends AbstractStore
                 p.setTitel(resultSet.getString(1));
                 p.setErsteller(resultSet.getString(2));
                 p.setSpendenmenge(resultSet.getDouble(3));
-                p.setKategorie(new Kategorie(-1,null,resultSet.getString(4)));
+                p.setKategorie(new Kategorie(-1, null, resultSet.getString(4)));
                 p.setKennung(resultSet.getInt(5));
                 openProjects.add(p);
             }
-            
+
             while(resultSet2.next())
             {
                 Projekt p = new Projekt();
                 p.setTitel(resultSet.getString(1));
                 p.setErsteller(resultSet.getString(2));
                 p.setSpendenmenge(resultSet.getDouble(3));
-                p.setKategorie(new Kategorie(-1,null,resultSet.getString(4)));
+                p.setKategorie(new Kategorie(-1, null, resultSet.getString(4)));
                 p.setKennung(resultSet.getInt(5));
                 closedProjects.add(p);
             }
@@ -112,11 +137,34 @@ public class ProjektStore extends AbstractStore
         }
         return returnMap;
     }
-    
-    public void deleteProject(int kennung) {
-        
+
+    public void deleteProject(Projekt projekt)
+    {
+        try(
+            PreparedStatement refund = connection.prepareStatement(REFUND);
+            PreparedStatement deleteComments = connection.prepareStatement(DELETE_COMMENTS);
+            PreparedStatement deleteFunds = connection.prepareStatement(DELETE_FUNDS);
+            PreparedStatement deleteProject = connection.prepareStatement(DELETE_PROJECT))
+        {
+            for(Spende s : projekt.getSpenden())
+            {
+                refund.setDouble(1, s.getSpendenbetrag());
+                refund.setString(2, s.getNutzer());
+                refund.executeUpdate();
+            }
+            deleteComments.setInt(1, projekt.getKennung());
+            deleteFunds.setInt(1, projekt.getKennung());
+            deleteProject.setInt(1, projekt.getKennung());
+            deleteComments.executeUpdate();
+            deleteFunds.executeUpdate();
+            deleteProject.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            throw new StoreException(e);
+        }
     }
-    
+
     public List<Kommentar> getComments(Projekt projekt)
     {
         List<Kommentar> kommentare = new ArrayList<>();
@@ -132,7 +180,6 @@ public class ProjektStore extends AbstractStore
                                     resultSet.getString(1),
                                     resultSet.getString(2),
                                     resultSet.getString(3).equalsIgnoreCase("oeffentlich")));
-                    System.out.println(resultSet.getString(2));
                 }
             }
         }
@@ -190,7 +237,6 @@ public class ProjektStore extends AbstractStore
         }
         return projekt;
     }
-   
 
     public List<Projekt> getProjectsFromCreator(String creator) throws StoreException
     {
@@ -214,7 +260,7 @@ public class ProjektStore extends AbstractStore
         }
         return returnList;
     }
-    
+
     private Projekt resultSetToProjekt(ResultSet rs) throws SQLException
     {
         Projekt projekt = new Projekt();

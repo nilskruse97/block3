@@ -22,6 +22,7 @@ public class ViewProjectServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         List<String> report = new ArrayList<>();
+        String delete = request.getParameter("delete");
         try(ProjektStore projektStore = new ProjektStore())
         {
             int kennung = Integer.parseInt(request.getParameter("kennung"));
@@ -32,8 +33,17 @@ public class ViewProjectServlet extends HttpServlet
             }
             else
             {
+                if(delete != null && delete.equalsIgnoreCase("1"))
+                {
+
+                    System.out.println("Lösche projekt" + kennung);
+                    projektStore.deleteProject(projekt);
+                    projektStore.complete();
+                    response.sendRedirect("/view_main");
+
+                    return;
+                }
                 request.setAttribute("projekt", projekt);
-                projektStore.getComments(projekt);
             }
 
         }

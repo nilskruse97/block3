@@ -35,6 +35,8 @@ public class ProjektStore extends AbstractStore
     private final String DELETE_FUNDS = "delete from dbp064.spenden s where s.projekt=?";
     private final String REFUND = "update konto k set k.guthaben = k.guthaben + ? where k.inhaber = ?";
 
+    private final String SET_CLOSED = "update projekt p set p.status = 'geschlossen' where p.kennung = ?";
+
     public ProjektStore() throws StoreException
     {
         super();
@@ -172,8 +174,10 @@ public class ProjektStore extends AbstractStore
     {
         try(PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COMMENT))
         {
-            preparedStatement.setString(1, kommentar.getText());
-            preparedStatement.setString(2, (kommentar.isSichtbar ? "oeffentlich" : "privat"));
+            System.out.println(kommentar.getKommentar());
+            System.out.println((kommentar.isSichtbar() ? "oeffentlich" : "privat"));
+            preparedStatement.setString(1, kommentar.getKommentar());
+            preparedStatement.setString(2, (kommentar.isSichtbar() ? "oeffentlich" : "privat"));
             preparedStatement.executeUpdate();
         }
         catch(SQLException e)
@@ -186,7 +190,7 @@ public class ProjektStore extends AbstractStore
     {
         try(PreparedStatement preparedStatement = connection.prepareStatement(INSERT_WRITES))
         {
-            preparedStatement.setString(1, kommentar.getBenutzer().getEmail());
+            preparedStatement.setString(1, kommentar.getBenutzer());
             preparedStatement.setInt(2, projektKennung);
             preparedStatement.setInt(3, kommentar.getId());
             preparedStatement.executeUpdate();
@@ -240,6 +244,19 @@ public class ProjektStore extends AbstractStore
                 preparedStatement.setInt(5, projekt.getFkVorgaenger());
             }
             preparedStatement.setInt(6, projekt.getFkKategorie());
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            throw new StoreException(e);
+        }
+    }
+
+    public void setClosed(int kennung)
+    {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SET_CLOSED))
+        {
+            preparedStatement.setInt(1, kennung);
             preparedStatement.executeUpdate();
         }
         catch(SQLException e)

@@ -2,7 +2,6 @@ package de.unidue.inf.is;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,9 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import de.unidue.inf.is.domain.Kommentar;
-import de.unidue.inf.is.domain.Kategorie;
 import de.unidue.inf.is.domain.Projekt;
-import de.unidue.inf.is.stores.KategorieStore;
 import de.unidue.inf.is.stores.ProjektStore;
 import de.unidue.inf.is.stores.StoreException;
 
@@ -21,7 +18,6 @@ public class NewCommentServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
     private String USER = HardcodedUser.get();
-}
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -61,18 +57,16 @@ public class NewCommentServlet extends HttpServlet
         String text = request.getParameter("text");
         String sichtbarkeit = request.getParameter("sichtbarkeit");
         int projektKennung = Integer.parseInt(request.getParameter("kennung"));
-
-        List<String> report = check(text);
+        List<String> report = new ArrayList<>();//check(text);
         if(report.isEmpty())
         {
-            try(ProjektStore projektStore = new ProjektStore(), )
+            try(ProjektStore projektStore = new ProjektStore())
             {
                 Kommentar kommentar = new Kommentar();
                 kommentar.setKommentar(text);
-                kommentar.setSichtbar(!sichtbarkeit);
-
+                kommentar.setSichtbar(sichtbarkeit == null);
                 projektStore.addComment(kommentar);
-                projektStore.writesComment(kommentar, projektKennung)
+                projektStore.writesComment(kommentar, projektKennung);
                 projektStore.complete();
                 report.add("Kommentar erfolgreich erstellt!");
             }
@@ -84,3 +78,6 @@ public class NewCommentServlet extends HttpServlet
         }
         request.setAttribute("report", report);
         doGet(request, response);
+    }
+
+}

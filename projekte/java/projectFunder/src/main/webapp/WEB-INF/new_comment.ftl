@@ -45,7 +45,7 @@
     </div>
 
     <div id="site">
-        <form name="projekt" action="new_pcomment" method="post">
+        <form name="projekt" action="new_comment?kennung=${projekt.kennung}" method="post">
             Kommentar: <br/>
             <textarea name="text" cols="50" rows="5"></textarea>
             <br/>

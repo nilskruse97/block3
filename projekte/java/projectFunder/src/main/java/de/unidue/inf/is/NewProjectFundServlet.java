@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import de.unidue.inf.is.domain.Projekt;
+import de.unidue.inf.is.stores.KontoSpendenStore;
 import de.unidue.inf.is.stores.ProjektStore;
 import de.unidue.inf.is.stores.StoreException;
 
@@ -64,10 +65,50 @@ public class NewProjectFundServlet extends HttpServlet
         String spendenbetrag = request.getParameter("spendenbetrag");
         String sichtbarkeit = request.getParameter("sichtbarkeit");
         String kennung = request.getParameter("kennung");
-        System.out.println(spendenbetrag);
-        System.out.println(sichtbarkeit);
-        System.out.println(kennung);
+        List<String> report = new ArrayList<>();
+        Double spende = Double.parseDouble(spendenbetrag);
+        int projekt = Integer.parseInt(kennung);
+        if(spende <= 0)
+        {
+            report.add("Spende muss größer als 0 sein.");
+        }
+        else
+        {
+            try(KontoSpendenStore kStore = new KontoSpendenStore(); ProjektStore pStore = new ProjektStore())
+            {
+                if(kStore.getBalance(USER) < spende)
+                {
+                    report.add("Nicht genug Geld.");
+                }
+                else
+                {
+                    if(kStore.fundExists(USER, projekt))
+                    {
+                        report.add("Projekt bereits unterstützt.");
+                    }
+                    else
+                    {
+                        kStore.addFund(USER, projekt, spende, sichtbarkeit == null ? "oeffentlich" : "privat");
+                        kStore.complete();
+                        Projekt projekt2 = pStore.getProjectForViewProject(projekt);
+                        if(projekt2.getSpendenmenge() >= projekt2.getFinanzierungslimit())
+                        {
+                            pStore.setClosed(projekt);
+                            pStore.complete();
+                        }
+                    }
+                }
+
+            }
+            catch(StoreException e)
+            {
+
+                report.add("Datenbankfehler.");
+                e.printStackTrace();
+            }
+
+        }
+        request.setAttribute("report", report);
         response.sendRedirect("/view_project?kennung=" + kennung);
-        //doGet(request, response);
     }
 }

@@ -49,7 +49,7 @@ body{
 			${r}<br/>
    		</#list>
    		<#if projekt??>
-		Icon: ${projekt.kategorie.icon}<br/>
+		Icon: <img src="${projekt.kategorie.icon}"><br/>
 		Titel: ${projekt.titel}<br/>
 		Ersteller: ${projekt.ersteller}<br/>
 		Finanzierungslimit: ${projekt.finanzierungslimit}<br/>

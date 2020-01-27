@@ -24,6 +24,7 @@ public class EditProjectServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+    	List<String> report = new ArrayList<>();
         try(ProjektStore projektStore = new ProjektStore(); KategorieStore kategorieStore = new KategorieStore())
         {
             List<Projekt> eigeneProjekte = projektStore.getProjectsFromCreator(USER);
@@ -84,6 +85,7 @@ public class EditProjectServlet extends HttpServlet
                 projektStore.updateProject(projekt, kennung);
                 projektStore.complete();
                 report.add("Projekt erfolgreich editiert!");
+                response.sendRedirect("/view_project?kennung=" + kennung);
             }
             catch(StoreException e)
             {
@@ -92,7 +94,6 @@ public class EditProjectServlet extends HttpServlet
             }
         }
         request.setAttribute("report", report);
-        doGet(request, response);
     }
 
     private List<String> check(String titel, String finanzierungslimit, String kategorie, String vorgaenger)

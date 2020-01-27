@@ -20,7 +20,7 @@ public class ProjektStore extends AbstractStore
     private final String PROJECT_FROM_CREATOR_QUERY = "select * from dbp064.projekt where ersteller=(?)";
     private final String INSERT_PROJECT = "INSERT INTO dbp064.projekt (titel, beschreibung, finanzierungslimit, ersteller, vorgaenger, kategorie) VALUES (?,?,?,?,?,?)";
     private final String PROJECT_FROM_ID_QUERY = "select * from dbp064.projekt where kennung=(?)";
-    private final String UPDATE_PROJECT = "update projekt p set p.titel = ?, p.beschreibung = ?, p.finanzierungslimit = ?, p.vorgaenger = ?, p.kategorie = ? where p.kennung = ?";
+    private final String UPDATE_PROJECT = "update dbp064.projekt p set p.titel = ?, p.beschreibung = ?, p.finanzierungslimit = ?, p.vorgaenger = ?, p.kategorie = ? where p.kennung = ?";
     private final String OPEN_PROJECTS_FOR_MAIN_QUERY = "select p.titel, p.ersteller, (select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), k.icon, p.kennung from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.status='offen'";
     private final String CLOSED_PROJECTS_FOR_MAIN_QUERY = "select p.titel, p.ersteller, (select SUM(spendenbetrag) from dbp064.spenden s where s.projekt = p.kennung), k.icon, p.kennung from dbp064.projekt p, dbp064.kategorie k where p.kategorie = k.id and p.status='geschlossen'";
     private final String PROJECTS_FOR_VIEW_PROJECT_QUERY = "select k.icon, p.titel, p.ersteller, p.beschreibung, p.finanzierungslimit, "
@@ -261,7 +261,7 @@ public class ProjektStore extends AbstractStore
         }
     }
 
-    public void updateProject(Projekt projekt, kennung)
+    public void updateProject(Projekt projekt, int kennung)
     {
         try(PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PROJECT))
         {

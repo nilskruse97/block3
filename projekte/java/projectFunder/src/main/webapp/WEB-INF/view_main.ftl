@@ -53,18 +53,18 @@ body{
 		    </tr>
 		    <#list projekte as projekt>
 		    <tr>
-		        <td><img src="${projekt.kategorie.icon}">${projekt.kategorie.icon}</td> <td><a href="/view_project?kennung=${projekt.kennung}">${projekt.titel}<a/></td> <td><a href="/view_profile?nutzer=${projekt.ersteller}">${projekt.ersteller}<a/></td> <td>${projekt.spendenmenge}</td>
+		        <td><img src="${projekt.kategorie.icon}"></td> <td><a href="/view_project?kennung=${projekt.kennung}">${projekt.titel}<a/></td> <td><a href="/view_profile?nutzer=${projekt.ersteller}">${projekt.ersteller}<a/></td> <td>${projekt.spendenmenge}</td>
 		    </tr>
 		    </#list>
 	  	</table>
 	  	Geschlossene Projekte
 	  	<table class="datatable">
 		    <tr>
-		        <th>Kennung</th>  <th>Titel</th>
+		        <th>Kategorie</th>  <th>Titel</th> <th>Ersteller</th> <th>Spendensumme</th>
 		    </tr>
 		    <#list projekte2 as projekt>
 		    <tr>
-		        <td>${projekt.kennung}</td> <td><a href="/view_project?kennung=${projekt.kennung}">${projekt.titel}<a/></td>
+		        <td><img src="${projekt.kategorie.icon}"></td> <td><a href="/view_project?kennung=${projekt.kennung}">${projekt.titel}<a/></td> <td><a href="/view_profile?nutzer=${projekt.ersteller}">${projekt.ersteller}<a/></td> <td>${projekt.spendenmenge}</td>
 		    </tr>
 		    </#list>
 	  	</table>

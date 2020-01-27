@@ -27,6 +27,9 @@ public class ProjektStore extends AbstractStore
     private final String GET_COMMENTS_QUERY = "select s.benutzer, k.text, k.sichtbarkeit from dbp064.kommentar k join dbp064.schreibt s on s.kommentar = k.id where s.projekt=? order by k.id desc";
     private final String GET_FUNDS_QUERY = "select s.spender, s.spendenbetrag, s.sichtbarkeit from dbp064.spenden s where s.projekt=? order by s.spendenbetrag desc";
 
+    private final String INSERT_COMMENT = "INSERT INTO dbp064.projekt (text, sichtbarkeit) VALUES (?,?)";
+    private final String INSERT_WRITES = "INSERT INTO dbp064.schreibt (benutzer, projekt, kommentar) VALUES (?,?,?)";
+
     private final String DELETE_PROJECT = "delete from dbp064.projekt p where p.kennung=?";
     private final String DELETE_COMMENTS = "delete from dbp064.kommentar k where k.id in (select s.kommentar from dbp064.schreibt s where s.projekt = ?)";
     private final String DELETE_FUNDS = "delete from dbp064.spenden s where s.projekt=?";
@@ -163,6 +166,36 @@ public class ProjektStore extends AbstractStore
         {
             throw new StoreException(e);
         }
+    }
+
+    public void addComment(Kommentar kommentar)
+    {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COMMENT))
+        {
+            preparedStatement.setString(1, kommentar.getText());
+            preparedStatement.setString(2, (kommentar.isSichtbar ? "oeffentlich" : "privat"));
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            throw new StoreException(e);
+        }
+    }
+
+    public void writesComment(Kommentar kommentar, int projektKennung)
+    {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(INSERT_WRITES))
+        {
+            preparedStatement.setString(1, kommentar.getBenutzer().getEmail());
+            preparedStatement.setInt(2, projektKennung);
+            preparedStatement.setInt(3, kommentar.getId());
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            throw new StoreException(e);
+        }
+
     }
 
     public List<Kommentar> getComments(Projekt projekt)

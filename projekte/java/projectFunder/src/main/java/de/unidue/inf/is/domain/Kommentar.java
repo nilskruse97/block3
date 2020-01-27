@@ -6,6 +6,7 @@ public class Kommentar
     private String text;
     private boolean sichtbar;
     private String nutzer;
+    private int id;
 
     public Kommentar()
     {
@@ -18,6 +19,7 @@ public class Kommentar
         this.benutzer = benutzer;
         this.text = kommentar;
         this.sichtbar = sichtbar;
+        this.id = id;
     }
 
     public String getBenutzer()
@@ -59,5 +61,9 @@ public class Kommentar
     {
         this.nutzer = nutzer;
     }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
 }

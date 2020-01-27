@@ -31,13 +31,30 @@ public class EditProjectServlet extends HttpServlet
 
             request.setAttribute("vorgaenger", eigeneProjekte);
             request.setAttribute("kategorien", kategorien);
+
+            int kennung = Integer.parseInt(request.getParameter("kennung"));
+            Projekt projekt = projektStore.getProjectForViewProject(kennung);
+
+            if(projekt == null)
+            {
+                report.add("Projekt nicht gefunden!");
+            }
+            else
+            {
+                request.setAttribute("projekt", projekt);
+            }
+
         }
         catch(StoreException e)
         {
             request.setAttribute("report", Arrays.asList("Fehler beim Laden aus der Datenbank!"));
             e.printStackTrace();
         }
-
+        catch(NumberFormatException e)
+        {
+            report.add("Ungültige Kennung!");
+        }
+        request.setAttribute("report", report);
         request.getRequestDispatcher("/edit_project.ftl").forward(request, response);
 
     }

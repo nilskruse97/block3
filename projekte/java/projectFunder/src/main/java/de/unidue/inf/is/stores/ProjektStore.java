@@ -127,11 +127,11 @@ public class ProjektStore extends AbstractStore
             while(resultSet2.next())
             {
                 Projekt p = new Projekt();
-                p.setTitel(resultSet.getString(1));
-                p.setErsteller(resultSet.getString(2));
-                p.setSpendenmenge(resultSet.getDouble(3));
-                p.setKategorie(new Kategorie(-1, null, resultSet.getString(4)));
-                p.setKennung(resultSet.getInt(5));
+                p.setTitel(resultSet2.getString(1));
+                p.setErsteller(resultSet2.getString(2));
+                p.setSpendenmenge(resultSet2.getDouble(3));
+                p.setKategorie(new Kategorie(-1, null, resultSet2.getString(4)));
+                p.setKennung(resultSet2.getInt(5));
                 closedProjects.add(p);
             }
 

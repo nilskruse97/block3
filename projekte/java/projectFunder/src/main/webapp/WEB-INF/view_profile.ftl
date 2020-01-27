@@ -50,17 +50,20 @@ body{
 		<#list report! as r>
 			${r}<br/>
    		</#list>
+   		<#if benutzer??>
 		Email: ${benutzer.email}<br/>
-		NAme: ${benutzer.name}<br/>
+		Name: ${benutzer.name}<br/>
 		Erstellte Projekte: ${anzahlErstellt}<br/>
 		Unterstütze Projekte: ${anzahlUnterstuetzt}<br/>
-		Erstellte Projekte:
+		Erstellte Projekte:<br/>
 		<#list erstellte as p>
 	    <a href="/view_project?kennung=${p.kennung}">${p.titel}<a/><br/>
-	    Unterstützte Projekte:
+	    </#list>
+	    Unterstützte Projekte:<br/>
 		<#list unterstuetzte as u>
 	    <a href="/view_project?kennung=${u.kennung}">${u.titel}<a/><br/>
 	    </#list>
+	    </#if>
 	    
 	    
 	    

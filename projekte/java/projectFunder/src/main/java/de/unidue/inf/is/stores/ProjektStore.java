@@ -31,11 +31,12 @@ public class ProjektStore extends AbstractStore
 
     private final String INSERT_COMMENT = "INSERT INTO dbp064.kommentar (text, sichtbarkeit, id) VALUES (?,?,?)";
     private final String INSERT_WRITES = "INSERT INTO dbp064.schreibt (benutzer, projekt, kommentar) VALUES (?,?,?)";
-
+    private final String DELETE_WRITES = "delete from dbp064.schreibt s where s.projekt=?";
     private final String DELETE_PROJECT = "delete from dbp064.projekt p where p.kennung=?";
     private final String DELETE_COMMENTS = "delete from dbp064.kommentar k where k.id in (select s.kommentar from dbp064.schreibt s where s.projekt = ?)";
     private final String DELETE_FUNDS = "delete from dbp064.spenden s where s.projekt=?";
-    private final String REFUND = "update konto k set k.guthaben = k.guthaben + ? where k.inhaber = ?";
+    private final String REFUND = "update dbp064.konto k set k.guthaben = k.guthaben + ? where k.inhaber = ?";
+    private final String CLEAR_PREDECESSOR = "update dbp064.projekt p set p.vorgaenger = null where p.vorgaenger = ?";
 
     private final String SET_CLOSED = "update projekt p set p.status = 'geschlossen' where p.kennung = ?";
 
@@ -151,7 +152,9 @@ public class ProjektStore extends AbstractStore
             PreparedStatement refund = connection.prepareStatement(REFUND);
             PreparedStatement deleteComments = connection.prepareStatement(DELETE_COMMENTS);
             PreparedStatement deleteFunds = connection.prepareStatement(DELETE_FUNDS);
-            PreparedStatement deleteProject = connection.prepareStatement(DELETE_PROJECT))
+            PreparedStatement deleteProject = connection.prepareStatement(DELETE_PROJECT);
+        		PreparedStatement deleteWrites= connection.prepareStatement(DELETE_WRITES);
+        		PreparedStatement clear= connection.prepareStatement(CLEAR_PREDECESSOR))
         {
             for(Spende s : projekt.getSpenden())
             {
@@ -162,8 +165,13 @@ public class ProjektStore extends AbstractStore
             deleteComments.setInt(1, projekt.getKennung());
             deleteFunds.setInt(1, projekt.getKennung());
             deleteProject.setInt(1, projekt.getKennung());
+            deleteWrites.setInt(1, projekt.getKennung());
+            clear.setInt(1, projekt.getKennung());
+            clear.executeUpdate();
+            deleteWrites.executeUpdate();
             deleteComments.executeUpdate();
             deleteFunds.executeUpdate();
+            
             deleteProject.executeUpdate();
         }
         catch(SQLException e)

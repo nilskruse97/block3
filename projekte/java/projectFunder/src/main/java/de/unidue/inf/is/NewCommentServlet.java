@@ -63,10 +63,11 @@ public class NewCommentServlet extends HttpServlet
             try(ProjektStore projektStore = new ProjektStore())
             {
                 Kommentar kommentar = new Kommentar();
+                kommentar.setBenutzer(USER);
                 kommentar.setKommentar(text);
                 kommentar.setSichtbar(sichtbarkeit == null);
-                projektStore.addComment(kommentar);
-                projektStore.writesComment(kommentar, projektKennung);
+                projektStore.addComment(kommentar, projektKennung);
+                //projektStore.writesComment(kommentar, projektKennung);
                 projektStore.complete();
                 report.add("Kommentar erfolgreich erstellt!");
             }
@@ -77,7 +78,8 @@ public class NewCommentServlet extends HttpServlet
             }
         }
         request.setAttribute("report", report);
-        doGet(request, response);
+
+        response.sendRedirect("/view_project?kennung=" + projektKennung);
     }
 
 }

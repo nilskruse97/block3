@@ -11,9 +11,9 @@ import de.unidue.inf.is.domain.Projekt;
 
 public class BenutzerStore extends AbstractStore
 {
-    private final String GET_USER_QUERY = "select * from dbp064.benuter where email = ?";
-    private final String GET_ALL_SUPPORTED_PROJECTS_QUERY = "select p.kennung, p.titel, p.sichtbarkeit from dbp064.projekt p, dbp064.spenden s where p.kennung = s.projekt and s.spender = ?";
-    private final String GET_SUPPORTED_PROJECTS_QUERY = "select p.kennung, p.titel, p.sichtbarkeit from dbp064.projekt p, dbp064.spenden s where p.kennung = s.projekt and s.spender = ? and s.sichtbarkeit = 'oeffentlich'";
+    private final String GET_USER_QUERY = "select * from dbp064.benutzer where email = ?";
+    private final String GET_ALL_SUPPORTED_PROJECTS_QUERY = "select p.kennung, p.titel, s.sichtbarkeit from dbp064.projekt p, dbp064.spenden s where p.kennung = s.projekt and s.spender = ?";
+    private final String GET_SUPPORTED_PROJECTS_QUERY = "select p.kennung, p.titel, s.sichtbarkeit from dbp064.projekt p, dbp064.spenden s where p.kennung = s.projekt and s.spender = ? and s.sichtbarkeit = 'oeffentlich'";
     private final String GET_PROJECTS_USER_QUERY = "select p.kennung, p.titel from dbp064.projekt p where p.ersteller = ?";
 
     public List<Projekt> getProjectsFromCreator(String creator) throws StoreException

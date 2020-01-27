@@ -94,6 +94,7 @@ public class EditProjectServlet extends HttpServlet
             }
         }
         request.setAttribute("report", report);
+        response.sendRedirect("/view_project?kennung=" + kennung);
     }
 
     private List<String> check(String titel, String finanzierungslimit, String kategorie, String vorgaenger)

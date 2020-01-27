@@ -68,7 +68,7 @@
             Beschreibung: <br/>
             <textarea name="beschreibung" cols="50" rows="10">${projekt.beschreibung}</textarea>
             <br/>
-            <input type="submit" value="Erstellen" />
+            <input type="submit" value="Editieren" />
         </form>
         </#if>
   	<#list report! as r>
